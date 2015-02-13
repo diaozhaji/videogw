@@ -16,6 +16,7 @@ namespace Bupt.ImageCommLab.uvideoservice
         {
             // Edit the base address of Service1 by replacing the "Service1" string below
             RouteTable.Routes.Add(new ServiceRoute("videozone", new WebServiceHostFactory(), typeof(Service)));
+            RouteTable.Routes.Add(new ServiceRoute("mobile", new WebServiceHostFactory(), typeof(mobileService)));
 
         }
     }

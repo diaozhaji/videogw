@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Groups.cs" />
+    <Compile Include="mobileService.cs" />
     <Compile Include="SampleItem.cs" />
     <Compile Include="Search.cs" />
     <Compile Include="Service.cs" />
