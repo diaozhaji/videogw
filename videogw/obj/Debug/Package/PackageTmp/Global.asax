@@ -1,0 +1,1 @@
+<%@ Application Codebehind="Global.asax.cs" Inherits="Bupt.ImageCommLab.uvideoservice.Global" Language="C#" %>
