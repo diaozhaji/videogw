@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<users xmlns="http://www.uv.bupt.cn">
+  <user>
+    <name>admin</name>
+    <password>123456</password>
+  </user>
+  <user>
+    <name>test</name>
+    <password>hello</password>
+  </user>
+  <user>
+    <name>22222</name>
+    <password>he</password>
+  </user>
+</users>

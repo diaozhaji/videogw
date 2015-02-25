@@ -6,20 +6,21 @@ using System.Xml.Serialization;
 
 namespace Bupt.ImageCommLab.uvideoservice
 {
-    public class video_list:List<video>
+    [XmlRootAttribute(ElementName = "videos")]
+    public class videos:List<video>
     {
 
     }
 
     //上面这个用在了all_videos类中，大小写什么的以后再改
-
+    
     //下面这个是在search中使用的，我觉得名字需要再改改
     [XmlRootAttribute(ElementName="videos")]
-    public class search_video_list:List<Video>
+    public class search_video_list:List<video>
     {
 
     }
-    
+    /*
     public class Video 
     {
         [XmlElement(ElementName="source")]
@@ -29,5 +30,5 @@ namespace Bupt.ImageCommLab.uvideoservice
     {
         [XmlElement(ElementName="address")]
         public string address;
-    }
+    }*/
 }

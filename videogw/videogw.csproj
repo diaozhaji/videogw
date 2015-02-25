@@ -65,18 +65,18 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Groups.cs" />
-    <Compile Include="mobileService.cs" />
-    <Compile Include="SampleItem.cs" />
-    <Compile Include="Search.cs" />
-    <Compile Include="Service.cs" />
+    <Compile Include="data\Groups.cs" />
+    <Compile Include="data\msg.cs" />
+    <Compile Include="service\mobileService.cs" />
+    <Compile Include="data\Search.cs" />
+    <Compile Include="service\Service.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="video.cs" />
-    <Compile Include="Videos.cs" />
-    <Compile Include="videozone.cs" />
+    <Compile Include="data\video.cs" />
+    <Compile Include="data\videos.cs" />
+    <Compile Include="data\videozone.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -25,7 +25,7 @@ namespace Bupt.ImageCommLab.uvideoservice
         [XmlElement(Order = 5, ElementName = "chinese-name")]
         public string chinese_name { get; set; }
 
-        [XmlElement(Order = 6)]
+        [XmlElement(Order = 6, ElementName = "description")]
         public string description { get; set; }
 
         [XmlElement(Order = 7, ElementName = "position")]

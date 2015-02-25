@@ -7,8 +7,9 @@ using System.Xml.Serialization;
 
 namespace Bupt.ImageCommLab.uvideoservice
 {
-    // TODO: Edit the SampleItem class
-    
+    /**
+     * videozone 作为根节点，下有5个子节点
+     * */
     [XmlRootAttribute("videozone")]
     public class videozone
     {
@@ -22,19 +23,6 @@ namespace Bupt.ImageCommLab.uvideoservice
         [XmlElement(Order = 4, ElementName = "groups")]
         public Groups groups = new Groups();
         [XmlElement(Order = 5, ElementName = "videos")]
-        public video_list videos = new video_list();
+        public videos videos = new videos();
     }
-    /*
-    [DataContract]
-    public class videozone
-    {
-        [DataMember]
-        public string id { get; set; }
-        [DataMember(Order = 1, Name = "english-name")]
-        public string english_name { get; set; }
-        [DataMember(Order = 2, Name = "chinese-name")]
-        public string chinese_name { get; set; }
-    }*/
-
-
 }

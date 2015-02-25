@@ -2,7 +2,7 @@
 <videozone xmlns="http://www.uv.bupt.cn">
   <id>123</id>
   <english-name>TestVideoZone</english-name>
-  <chinese-name>heheheeh我的视频区</chinese-name>
+  <chinese-name>我的视频区</chinese-name>
   <groups>
     <group>
       <id>1</id>

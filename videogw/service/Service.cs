@@ -20,7 +20,7 @@ namespace Bupt.ImageCommLab.uvideoservice
     public class Service
     {
         // TODO: Implement the collection resource that will contain the SampleItem instances
-        
+
         //命名空间
         public string ns = "http://www.uv.bupt.cn";
 
@@ -34,10 +34,10 @@ namespace Bupt.ImageCommLab.uvideoservice
             XmlDocument doc = new XmlDocument();
             //本地测试
             string path = System.Web.HttpContext.Current.Server.MapPath("/App_Data/videozone.xml");
-            
+
             //IIS发布 正式发布是还要改~！ 下面save也要改
             //string path = System.Web.HttpContext.Current.Server.MapPath("/VideogwTest/App_Data/videozone.xml");
-            doc.Load(path) ;
+            doc.Load(path);
             return doc;
         }
 
@@ -65,7 +65,7 @@ namespace Bupt.ImageCommLab.uvideoservice
             a = ran.Next(10000000, 99999999);
             b = ran.Next(10000000, 99999999);
             //C#存在问题，要new一个新的字符串
-            string randomKey = new string(' ',17);
+            string randomKey = new string(' ', 17);
             randomKey = Convert.ToString(a) + Convert.ToString(b);
             return randomKey;
         }
@@ -103,7 +103,7 @@ namespace Bupt.ImageCommLab.uvideoservice
             }
 
         }
-        
+
         /*
          * 更新当前视频区的信息
          * /videozone下操作
@@ -130,24 +130,46 @@ namespace Bupt.ImageCommLab.uvideoservice
          */
         [WebGet(UriTemplate = "/search")]
         [XmlSerializerFormat]
-        public search_video_list GetSourceAddress() 
+        public search_video_list GetSourceAddress()
         {
-            IntPtr str = Search.GetDevInfo();
-            string s = Marshal.PtrToStringAnsi(str);
+            //IntPtr str = Search.GetDevInfo();
+            //string s = Marshal.PtrToStringAnsi(str);
             //test
             string test = "10.102.0.217|10.102.0.225|10.102.0.224|";
-            //string[] sArry =test.Split('|');
-            string[] sArry = s.Split('|');
+            string[] sArry = test.Split('|');
+            //string[] sArry = s.Split('|');
             search_video_list v_list = new search_video_list();
-            for (int i = 0; i < sArry.Length - 1; i++) 
+            for (int i = 0; i < sArry.Length - 1; i++)
             {
-                Video V = new Video();
-                V.src.address = sArry[i];
-                v_list.Add(V);
+                video searchVideo = new video();
+                //searchVideo.src.address = sArry[i];
+
+                v_list.Add(setAddress(searchVideo, sArry[i]));
             }
             return v_list;
         }
-        
+
+        /*
+         * 本程序返回结果xml的特点是，只要将某标签置为null，即不会显示在结果中
+         */
+        public video setAddress(video v, String address)
+        {
+            v.src.address = address;
+            v.chinese_name = null;
+            v.english_name = null;
+            v.description = null;
+            v.id = null;
+            v.security_level = null;
+            v.status = null;
+            v.TPYE = null;
+            v.grs = null;
+            v.p = null;
+            v.pub = null;
+            v.s = null;
+            v.src.u = null;
+            return v;
+        }
+
         /*
          * 视频组  
          * /videozone/videogroups下的操作   ！这个暂时删掉了，不用这个方法
@@ -181,7 +203,7 @@ namespace Bupt.ImageCommLab.uvideoservice
 
         }
 
-        
+
         /*
          * 得到某一个视频组的信息，文档中没有，但调试时做POST时有用
          * /videozone/videogroup/{id}下操作
@@ -198,7 +220,7 @@ namespace Bupt.ImageCommLab.uvideoservice
             XmlNodeList nodes = doc.SelectNodes("/ns:videozone/ns:groups/ns:group", nsMgr);
             group g = new group();
 
-            foreach (XmlNode node in nodes) 
+            foreach (XmlNode node in nodes)
             {
                 XmlNode n_id = node.SelectSingleNode("ns:id", nsMgr);
                 if (id == n_id.InnerText)
@@ -209,7 +231,7 @@ namespace Bupt.ImageCommLab.uvideoservice
                     g.english_name = n_eName.InnerText;
                     g.chinese_name = n_chName.InnerText;
                 }
-                else 
+                else
                 {
                     //do noing
                 }
@@ -278,12 +300,12 @@ namespace Bupt.ImageCommLab.uvideoservice
             doc = LoadXml();
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(doc.NameTable);
             nsMgr.AddNamespace("ns", ns);
-            XmlNodeList group_list = doc.SelectNodes("ns:videozone/ns:groups/ns:group",nsMgr);
-            foreach (XmlNode node in group_list) 
+            XmlNodeList group_list = doc.SelectNodes("ns:videozone/ns:groups/ns:group", nsMgr);
+            foreach (XmlNode node in group_list)
             {
                 XmlNode g_id = node.SelectSingleNode("ns:id", nsMgr);
                 string s_id = g_id.InnerText;
-                if (s_id == id) 
+                if (s_id == id)
                 {
                     XmlNode eNameNode = node.SelectSingleNode("ns:english-name", nsMgr);
                     eNameNode.InnerText = G.english_name;
@@ -348,7 +370,7 @@ namespace Bupt.ImageCommLab.uvideoservice
             doc = LoadXml();
             XmlNamespaceManager nsMgr = new XmlNamespaceManager(doc.NameTable);
             nsMgr.AddNamespace("ns", ns);
-            
+
             //all_videos分2个部分，一部分是groups，一部分是videos
 
             videozone allvideos = new videozone();
@@ -370,9 +392,9 @@ namespace Bupt.ImageCommLab.uvideoservice
                 allvideos.groups.Add(g);
             }
             //video部分
-            
+
             XmlNodeList node_videos = doc.SelectNodes("/ns:videozone/ns:videos/ns:video", nsMgr);
-            for (int i = 1; i < node_videos.Count + 1; i++) 
+            for (int i = 1; i < node_videos.Count + 1; i++)
             {
                 video v = new video();
                 v.id = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:id", nsMgr).InnerText;
@@ -390,7 +412,7 @@ namespace Bupt.ImageCommLab.uvideoservice
                 //v.pub.addr.type = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:publish/ns:address", nsMgr).Attributes["type"].Value;
                 //publish也是个数组，可以有多个<address>节点                
                 XmlNodeList nodes_publish = doc.SelectNodes("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:publish/ns:address", nsMgr);
-                foreach (XmlNode node in nodes_publish) 
+                foreach (XmlNode node in nodes_publish)
                 {
                     address addre = new address();
                     addre.ad = node.InnerText;
@@ -455,7 +477,7 @@ namespace Bupt.ImageCommLab.uvideoservice
                     v.src.address = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:source/ns:address", nsMgr).InnerText;
                     v.src.u.name = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:source/ns:user/ns:name", nsMgr).InnerText;
                     v.src.u.password = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:source/ns:user/ns:password", nsMgr).InnerText;
-                    
+
                     XmlNodeList nodes_publish = doc.SelectNodes("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:publish/ns:address", nsMgr);
                     foreach (XmlNode node in nodes_publish)
                     {
@@ -469,9 +491,9 @@ namespace Bupt.ImageCommLab.uvideoservice
                     else { v.s.generate = false; }
                     if (doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:static/ns:abstract", nsMgr).InnerText == "true") { v.s.abstracts = true; }
                     else { v.s.abstracts = false; }
-                    
+
                     XmlNodeList groups_nodes = doc.SelectNodes("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:groupings/ns:group", nsMgr);
-                    foreach (XmlNode node in groups_nodes) 
+                    foreach (XmlNode node in groups_nodes)
                     {
                         group_id gr_id = new group_id();
                         gr_id.id = node.FirstChild.InnerText;
@@ -503,7 +525,7 @@ namespace Bupt.ImageCommLab.uvideoservice
          */
         [WebInvoke(UriTemplate = "/video/{id}", Method = "POST")]
         [XmlSerializerFormat]
-        public void CreateVideo(string id,video V)
+        public void CreateVideo(string id, video V)
         {
             id = id + "";
             XmlDocument doc = new XmlDocument();
@@ -521,7 +543,7 @@ namespace Bupt.ImageCommLab.uvideoservice
             for (int i = 1; i < node_videos.Count + 1; i++)
             {
                 XmlNode address_node = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:source/ns:address", nsMgr);
-                if (V.src.address == address_node.InnerText) 
+                if (V.src.address == address_node.InnerText)
                 {
                     flag++;
                     reId = i;
@@ -631,7 +653,7 @@ namespace Bupt.ImageCommLab.uvideoservice
 
 
             }
-            else 
+            else
             {
                 XmlNode status_node = doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + reId + "]/ns:status", nsMgr);
                 status_node.InnerText = "active";
@@ -639,7 +661,7 @@ namespace Bupt.ImageCommLab.uvideoservice
                 //throw new WebFaultException(System.Net.HttpStatusCode.NotFound);
             }
 
-            
+
         }
 
 
@@ -651,7 +673,7 @@ namespace Bupt.ImageCommLab.uvideoservice
          */
         [WebInvoke(UriTemplate = "/video/{id}", Method = "PUT")]
         [XmlSerializerFormat]
-        public void UpdateVideo(string id,video V) 
+        public void UpdateVideo(string id, video V)
         {
             //id = id + "";
             XmlDocument doc = new XmlDocument();
@@ -686,16 +708,20 @@ namespace Bupt.ImageCommLab.uvideoservice
                     }
                     //注意属性的写法，不用这个了，文档有修改
                     //doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:publish/ns:address", nsMgr).Attributes["type"].Value = V.pub.addr.type;
-                    if (V.s.generate == true){
+                    if (V.s.generate == true)
+                    {
                         doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:static/ns:generate", nsMgr).InnerText = "true";
                     }
-                    else{
+                    else
+                    {
                         doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:static/ns:generate", nsMgr).InnerText = "false";
                     }
-                    if (V.s.abstracts == true){
+                    if (V.s.abstracts == true)
+                    {
                         doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:static/ns:abstract", nsMgr).InnerText = "true";
                     }
-                    else{
+                    else
+                    {
                         doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:static/ns:abstract", nsMgr).InnerText = "false";
                     }
                     //doc.SelectSingleNode("/ns:videozone/ns:videos/ns:video[" + i + "]/ns:groupings/ns:group/ns:id", nsMgr).InnerText = V.grs.gri.id;
@@ -733,7 +759,7 @@ namespace Bupt.ImageCommLab.uvideoservice
          */
         [WebInvoke(UriTemplate = "/video/{id}", Method = "DELETE")]
         [XmlSerializerFormat]
-        public void DeleteVideo(string id) 
+        public void DeleteVideo(string id)
         {
             id = id + "";
             XmlDocument doc = new XmlDocument();
@@ -761,6 +787,6 @@ namespace Bupt.ImageCommLab.uvideoservice
 
         }
 
-       
+
     }
 }
